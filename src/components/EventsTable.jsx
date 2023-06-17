@@ -17,8 +17,9 @@ const Table = styled.table`
 const TableCell = styled.td`
   position: relative;
   height: 50.7px;
-  padding: 2px;
+  padding: 3px;
   border: #ccc solid 1px;
+  background-clip: content-box;
   background-color: ${({ hasEvent }) =>
     hasEvent ? 'lightblue' : 'transparent'};
 
@@ -45,10 +46,6 @@ function EventsTable({ events, startDate }) {
     moment().startOf('day').hour(index).format('HH:00'),
   );
 
-  const hasEventAtTime = (events, dateKey) => {
-    return events[dateKey] || [];
-  };
-
   const currentDateRange = Array.from({ length: 7 }, (_, dayIndex) =>
     moment(startDate).startOf('isoWeek').clone().add(dayIndex, 'days'),
   );
@@ -66,8 +63,7 @@ function EventsTable({ events, startDate }) {
             <tr key={hour}>
               {currentDateRange.map((currentDate, dayIndex) => {
                 const dateKey = currentDate.format('DD-MM-YYYY');
-                const hasEvent = hasEventAtTime(events, dateKey);
-
+                const hasEvent = events[dateKey] || [];
                 return (
                   <TableCell
                     key={`${hour}-${dayIndex}`}
