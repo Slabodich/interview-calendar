@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-
 import styled from 'styled-components';
 
 const TableWrapper = styled.div`
@@ -8,6 +7,7 @@ const TableWrapper = styled.div`
   grid-template-columns: 80px auto;
   gap: 10px;
 `;
+
 const Table = styled.table`
   margin-top: 12px;
   width: 100%;
@@ -26,12 +26,14 @@ const TableCell = styled.td`
     border-left: none;
   }
 `;
+
 const HoursWrapper = styled.div`
   justify-self: end;
   display: flex;
   flex-direction: column;
   padding-left: 10px;
 `;
+
 const Hours = styled.span`
   padding-bottom: 30px;
   color: #c3c3c3;
@@ -39,14 +41,17 @@ const Hours = styled.span`
 `;
 
 function EventsTable({ events, startDate }) {
-  const hours = [];
-  const startTime = moment().startOf('day').hour(0);
-  const endTime = moment().startOf('day').hour(23);
+  const hours = Array.from({ length: 24 }, (_, index) =>
+    moment().startOf('day').hour(index).format('HH:00'),
+  );
 
-  while (startTime.isSameOrBefore(endTime)) {
-    hours.push(startTime.format('HH:00'));
-    startTime.add(1, 'hour');
-  }
+  const hasEventAtTime = (events, dateKey) => {
+    return events[dateKey] || [];
+  };
+
+  const currentDateRange = Array.from({ length: 7 }, (_, dayIndex) =>
+    moment(startDate).startOf('isoWeek').clone().add(dayIndex, 'days'),
+  );
 
   return (
     <TableWrapper>
@@ -59,17 +64,14 @@ function EventsTable({ events, startDate }) {
         <tbody>
           {hours.map((hour) => (
             <tr key={hour}>
-              {Array.from({ length: 7 }).map((_, dayIndex) => {
-                const timeKey = moment(startDate)
-                  .hour(dayIndex)
-                  .format('DD-MM-YYYY HH:00');
-                console.log(timeKey);
-                const eventList = events[timeKey] || [];
+              {currentDateRange.map((currentDate, dayIndex) => {
+                const dateKey = currentDate.format('DD-MM-YYYY');
+                const hasEvent = hasEventAtTime(events, dateKey);
 
                 return (
                   <TableCell
                     key={`${hour}-${dayIndex}`}
-                    hasEvent={eventList.length > 0}
+                    hasEvent={hasEvent.includes(hour)}
                   />
                 );
               })}
