@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import moment from 'moment';
 
-function App() {
+import EventsTable from './components/EventsTable';
+import Header from './components/Header';
+import WeekChanger from './components/WeekChanger';
+import Footer from './components/Footer';
+
+const App = () => {
+  const [startDate, setStartDate] = React.useState(
+    moment().startOf('week').add(1, 'day'),
+  );
+  const [events, setEvents] = React.useState({
+    '15-01-2023': ['10:00', '22:00'],
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <WeekChanger startDate={startDate} setStartDate={setStartDate} />
+      <EventsTable events={events} startDate={startDate} />
+      <Footer setStartDate={setStartDate} />
     </div>
   );
-}
+};
 
 export default App;
