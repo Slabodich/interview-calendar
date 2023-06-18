@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.js": "/interview-calendar/static/js/main.d9a3f290.js",
+    "index.html": "/interview-calendar/index.html",
+    "static/media/addIcon.svg": "/interview-calendar/static/media/addIcon.900d2957503556ea08b4e0ba900fc47f.svg",
+    "static/media/nextIcon.svg": "/interview-calendar/static/media/nextIcon.5d5e40c73a3ec0b04288aea2efd6d640.svg",
+    "static/media/prevIvon.svg": "/interview-calendar/static/media/prevIvon.f3659114ea78fd79c44d5f2536d36827.svg",
+    "main.d9a3f290.js.map": "/interview-calendar/static/js/main.d9a3f290.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.d9a3f290.js"
+  ]
+}
