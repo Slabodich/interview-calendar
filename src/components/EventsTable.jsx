@@ -20,8 +20,8 @@ const TableCell = styled.td`
   padding: 3px;
   border: #ccc solid 1px;
   background-clip: content-box;
-  background-color: ${({ hasEvent }) =>
-    hasEvent ? 'lightblue' : 'transparent'};
+  background-color: ${({ hasEvent, isSelected }) =>
+    hasEvent && isSelected ? '#B3B7FF' : hasEvent ? '#EBECFF' : 'transparent'};
 
   &:first-child {
     border-left: none;
@@ -41,13 +41,27 @@ const Hours = styled.span`
   font-size: 18px;
 `;
 
-function EventsTable({ events, startDate }) {
-  const hours = Array.from({ length: 24 }, (_, index) =>
-    moment().startOf('day').hour(index).format('HH:00'),
+function EventsTable({
+  events,
+  startDate,
+  setShowDeleteButton,
+  selectedCell,
+  setSelectedCell,
+}) {
+  const hours = React.useMemo(
+    () =>
+      Array.from({ length: 24 }, (_, index) =>
+        moment().startOf('day').hour(index).format('HH:00'),
+      ),
+    [],
   );
 
-  const currentDateRange = Array.from({ length: 7 }, (_, dayIndex) =>
-    moment(startDate).startOf('isoWeek').clone().add(dayIndex, 'days'),
+  const currentDateRange = React.useMemo(
+    () =>
+      Array.from({ length: 7 }, (_, dayIndex) =>
+        moment(startDate).startOf('isoWeek').clone().add(dayIndex, 'days'),
+      ),
+    [startDate],
   );
 
   return (
@@ -64,10 +78,24 @@ function EventsTable({ events, startDate }) {
               {currentDateRange.map((currentDate, dayIndex) => {
                 const dateKey = currentDate.format('DD-MM-YYYY');
                 const hasEvent = events[dateKey] || [];
+                const isSelected =
+                  selectedCell &&
+                  selectedCell.hour === hour &&
+                  selectedCell.dayIndex === dayIndex;
                 return (
                   <TableCell
                     key={`${hour}-${dayIndex}`}
                     hasEvent={hasEvent.includes(hour)}
+                    isSelected={isSelected}
+                    onMouseDown={() => {
+                      if (hasEvent.includes(hour)) {
+                        setSelectedCell({ dateKey, hour, dayIndex });
+                        setShowDeleteButton(true);
+                      } else {
+                        setSelectedCell(null);
+                        setShowDeleteButton(false);
+                      }
+                    }}
                   />
                 );
               })}

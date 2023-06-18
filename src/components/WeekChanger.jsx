@@ -52,6 +52,7 @@ const CalendarDay = styled.div`
   display: flex;
   justify-content: center;
   flex-basis: calc(100% / 7);
+
   text-align: center;
   font-size: 25px;
   font-weight: 400;
@@ -62,6 +63,7 @@ const CalendarDay = styled.div`
     justify-content: center;
     width: 40px;
     height: 40px;
+
     background-color: ${({ isCurrentDay }) =>
       isCurrentDay ? 'red' : 'transparent'};
     color: ${({ isCurrentDay }) => (isCurrentDay ? 'white' : 'black')};

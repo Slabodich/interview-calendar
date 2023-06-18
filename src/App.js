@@ -8,21 +8,59 @@ import Footer from './components/Footer';
 
 const App = () => {
   const [startDate, setStartDate] = React.useState(
-    moment().startOf('week').add(1, 'day'),
+    moment().startOf('isoWeek').add(0, 'day'),
   );
-  const [events, setEvents] = React.useState({
-    '12-06-2023': ['10:00', '08:00'],
-    '18-06-2023': ['09:00'],
-    '20-06-2023': ['09:00', '00:00'],
-    '31-12-2022': ['09:00', '00:00'],
-    '01-01-2023': ['09:00', '00:00'],
-  });
+  const [events, setEvents] = React.useState({});
+  const [showDeleteButton, setShowDeleteButton] = React.useState(false);
+  const [selectedCell, setSelectedCell] = React.useState({});
+
+  React.useEffect(() => {
+    if (typeof Storage !== 'undefined') {
+      try {
+        const savedEvents = localStorage.getItem('events');
+        if (savedEvents) {
+          setEvents(JSON.parse(savedEvents));
+        }
+      } catch (error) {
+        console.error('Ошибка чтения из localStorage:', error);
+      }
+    } else {
+      console.warn('LocalStorage не поддерживается в этом браузере.');
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (typeof Storage !== 'undefined') {
+      try {
+        if (Object.keys(events).length !== 0) {
+          localStorage.setItem('events', JSON.stringify(events));
+        }
+      } catch (error) {
+        console.error('Ошибка записи в localStorage:', error);
+      }
+    } else {
+      console.warn('LocalStorage не поддерживается в этом браузере.');
+    }
+  }, [events]);
+
   return (
     <div>
       <Header events={events} setEvents={setEvents} />
       <WeekChanger startDate={startDate} setStartDate={setStartDate} />
-      <EventsTable events={events} startDate={startDate} />
-      <Footer setStartDate={setStartDate} />
+      <EventsTable
+        events={events}
+        startDate={startDate}
+        setShowDeleteButton={setShowDeleteButton}
+        selectedCell={selectedCell}
+        setSelectedCell={setSelectedCell}
+      />
+      <Footer
+        events={events}
+        setEvents={setEvents}
+        setStartDate={setStartDate}
+        showDeleteButton={showDeleteButton}
+        selectedCell={selectedCell}
+      />
     </div>
   );
 };

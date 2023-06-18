@@ -28,12 +28,17 @@ function Header({ events, setEvents }) {
 
     if (eventDateTime) {
       const [eventDate, eventTime] = eventDateTime.split(' ');
+      const validDateTime = moment(eventDateTime, 'DD-MM-YYYY HH', true);
+      if (!validDateTime.isValid()) {
+        alert('Invalid date or time format');
+        return;
+      }
       const dateKey = moment(eventDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
 
       if (events.hasOwnProperty(dateKey)) {
         events[dateKey].push(`${eventTime}:00`);
       } else {
-        events[dateKey] = [eventTime];
+        events[dateKey] = [`${eventTime}:00`];
       }
 
       setEvents({ ...events });
