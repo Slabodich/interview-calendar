@@ -12,9 +12,9 @@ const FooterWrapper = styled.footer`
 
   display: flex;
   justify-content: space-between;
-  height: 60px;
+
   width: 100%;
-  padding: 10px 50px;
+  padding: 10px 50px 30px;
   background-color: #f2f2f2;
   border-top: #ccc solid 1px;
 `;

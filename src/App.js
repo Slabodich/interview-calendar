@@ -44,7 +44,7 @@ const App = () => {
   }, [events]);
 
   return (
-    <div>
+    <>
       <Header events={events} setEvents={setEvents} />
       <WeekChanger startDate={startDate} setStartDate={setStartDate} />
       <EventsTable
@@ -61,7 +61,7 @@ const App = () => {
         showDeleteButton={showDeleteButton}
         selectedCell={selectedCell}
       />
-    </div>
+    </>
   );
 };
 
